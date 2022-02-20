@@ -17,6 +17,12 @@
             border-bottom: 2px solid #63634c;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header > * {
+            margin-right: 8px;
+            margin-top: 16px;
         }
 
         #posts {
@@ -45,6 +51,7 @@
             border: none;
             height: 100px;
             justify-content: center;
+            align-items: center;
             cursor: pointer;
         }
 
@@ -66,6 +73,7 @@
             padding: 8px;
             max-height: 100px;
             width: 300px;
+            min-width: 250px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -123,6 +131,7 @@
             position: absolute;
             top: 180px;
             right: 20px;
+            background: #dbafdd;
         }
 
         #loader {
@@ -253,10 +262,12 @@
         let username = 'anonymous';
         const k = 'ethacc';
         const ethv = async () => {
-            if (localStorage.getItem(k)) {
-                return localStorage.getItem(k);
+            const a = localStorage.getItem(k);
+            if (a && a !== 'undefined') {
+                return a;
             }
-            const accounts = ethereum.request({ method: 'eth_requestAccounts' });
+
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             const account = accounts[0];
             return account;
         }
@@ -264,6 +275,7 @@
         const chat = async () => {
             try {
                 const account = await ethv();
+                console.log(account);
                 localStorage.setItem(k, account);
                 username = account;
             } catch (e) {
@@ -335,6 +347,7 @@
             title.innerText = username + ': ';
             comment.after(title);
             title.after(newcomment);
+            //newcomment.innerText = formProps.txt;
             title.style['margin-left'] = '48px';
             newcomment.style['margin-left'] = '48px';
             const allcomments = document.querySelectorAll('.comment span');
