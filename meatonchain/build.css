@@ -1,0 +1,149 @@
+/* app.scss */
+body {
+  background: #020024;
+  background-size: cover;
+  height: 100vh;
+  background: linear-gradient(15deg, #c6c6c6 0%, #dbafdd 70%);
+}
+header {
+  margin: 0 10%;
+  padding: 24px;
+  border-bottom: 2px solid #63634c;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+header > * {
+  margin-right: 8px;
+  margin-top: 16px;
+}
+#posts {
+  margin: 0 10%;
+  font-family: "Arial", sans-serif;
+  opacity: 0;
+  transition: 0.5s;
+}
+#posts span,
+#posts img {
+  margin-right: 8px;
+}
+.post h5 {
+  margin-bottom: 16px;
+}
+#mint {
+  background: linear-gradient(15deg, white 0%, #c6c6c6 30%, #988398 100%);
+  box-shadow: 4px 4px 4px 0px #0000002e;
+  transition: 0.2s;
+  display: flex;
+  flex-direction: column;
+  color: #192651;
+  width: 120px;
+  border: none;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+#mint:hover {
+  transform: rotate(7deg);
+}
+#mint span {
+  display: block;
+  font-family:
+    "Garamond",
+    "Times New Roman",
+    Times,
+    serif;
+  font-weight: 100;
+  line-height: 8px;
+}
+#title {
+  background: #c8c8c8;
+  text-align: center;
+  box-shadow: inset 0px 0px 20px 0px #939090;
+  padding: 8px;
+  max-height: 100px;
+  width: 300px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+}
+#title h1,
+#title p {
+  margin: 0;
+  font-family: sans-serif;
+}
+#title h1 {
+  font-size: 40px;
+  letter-spacing: -2px;
+}
+#title p {
+  letter-spacing: 5px;
+  font-size: 25px;
+  transform: scaleY(0.85);
+}
+#garage {
+  background-image: url(garage_door.png);
+  display: block;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+}
+#description-toggle {
+  height: 100px;
+  width: 100px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+#description-toggle:hover {
+  transform: rotate(-8deg);
+}
+#introduction {
+  opacity: 0;
+  transition: 1s;
+  border: 2px solid #63634c;
+  max-width: 500px;
+  font-family: "High Tower Text", italic;
+  padding: 0 32px;
+  position: absolute;
+  top: 180px;
+  right: 20px;
+  background: #dbafdd;
+}
+#loader {
+  margin: 24px auto;
+  padding: 24px;
+  width: 200px;
+  border: 2px solid #63634c;
+  font-family: "High Tower Text", italic;
+  text-align: center;
+}
+#loader .loadbox {
+  background-color: black;
+  width: 30px;
+  height: 40px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+.comments {
+  color: #606147;
+}
+.comment-input {
+  margin-left: 48px;
+  background: linear-gradient(90deg, #fff0 0%, #cdc2cd 50%, #fff0 100%);
+}
+#name1 {
+  margin-left: 48px;
+}
+.comment-input input {
+  border: none;
+  background: none;
+  font-weight: 500;
+  height: 30px;
+}

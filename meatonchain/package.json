@@ -1,0 +1,19 @@
+{
+  "name": "zencare",
+  "version": "0.0.1",
+  "description": "Technical interview project",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --open --mode development"
+  },
+  "author": "Alex Sherman",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.14.25",
+    "esbuild-sass-plugin": "^2.2.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
