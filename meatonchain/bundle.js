@@ -1097,7 +1097,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
-          function useLayoutEffect(create, deps) {
+          function useLayoutEffect2(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create, deps);
           }
@@ -1368,7 +1368,7 @@
           exports.useDebugValue = useDebugValue;
           exports.useEffect = useEffect2;
           exports.useImperativeHandle = useImperativeHandle;
-          exports.useLayoutEffect = useLayoutEffect;
+          exports.useLayoutEffect = useLayoutEffect2;
           exports.useMemo = useMemo;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
@@ -19365,7 +19365,7 @@ For more info, visit https://fb.me/react-mock-scheduler`);
     dummyposts.push({
       user,
       date: "02/02/2022 16:32:48",
-      id: "#" + id,
+      id: "p" + id,
       image,
       comments: [
         {
@@ -19380,6 +19380,13 @@ For more info, visit https://fb.me/react-mock-scheduler`);
     const [loading, setLoading] = (0, import_react.useState)(true);
     const [connecting, setConnecting] = (0, import_react.useState)(true);
     const [posts, setPosts] = (0, import_react.useState)(dummyposts);
+    const [page, setPage] = (0, import_react.useState)(1);
+    const [showIntro, setShowIntro] = (0, import_react.useState)(false);
+    const PAGE_LENGTH = 10;
+    let pages = [];
+    for (let i = 0; i < Math.ceil(posts.length / PAGE_LENGTH); i++) {
+      pages.push(i + 1);
+    }
     const ethv = async () => {
       const a = localStorage.getItem(k);
       if (a && a !== "undefined") {
@@ -19397,11 +19404,10 @@ For more info, visit https://fb.me/react-mock-scheduler`);
         setUsername(account);
       } catch (e) {
         alert("woops, we no could attach to ur eth account! no chat for u");
-        setUsername("testbob");
       }
       setConnecting(false);
     };
-    (0, import_react.useEffect)(() => {
+    (0, import_react.useLayoutEffect)(() => {
       setTimeout(() => {
         document.querySelector("#garage").style.transition = "2s";
         document.querySelector("#garage").style.top = "-100%";
@@ -19438,12 +19444,13 @@ For more info, visit https://fb.me/react-mock-scheduler`);
     }, "PRESS"), /* @__PURE__ */ import_react.default.createElement("span", null, "To Create"), /* @__PURE__ */ import_react.default.createElement("span", null, '"Meat on Chain"')), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "title"
     }, /* @__PURE__ */ import_react.default.createElement("h1", null, "Meat on Chain"), /* @__PURE__ */ import_react.default.createElement("p", null, "YNGVE HOLEN")), /* @__PURE__ */ import_react.default.createElement("div", {
-      id: "description-toggle"
+      id: "description-toggle",
+      onClick: () => setShowIntro(true)
     }, /* @__PURE__ */ import_react.default.createElement("img", {
       width: 100,
       height: 100,
       src: "cartoonmeat.png"
-    }))), loading && /* @__PURE__ */ import_react.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "loader"
     }, /* @__PURE__ */ import_react.default.createElement("div", {
       class: "flex-center"
@@ -19457,9 +19464,9 @@ For more info, visit https://fb.me/react-mock-scheduler`);
       class: "loadbox"
     }), /* @__PURE__ */ import_react.default.createElement("div", {
       class: "loadbox"
-    })), /* @__PURE__ */ import_react.default.createElement("i", null, "loading . . .")), !loading && !connecting && /* @__PURE__ */ import_react.default.createElement("div", {
+    })), /* @__PURE__ */ import_react.default.createElement("i", null, "loading . . .")), !loading && !connecting && /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", {
       id: "posts"
-    }, posts.map((p) => /* @__PURE__ */ import_react.default.createElement(Post, {
+    }, posts.slice((page - 1) * PAGE_LENGTH, page * PAGE_LENGTH).map((p) => /* @__PURE__ */ import_react.default.createElement(Post, {
       post: p,
       username,
       addComment: (comment) => {
@@ -19473,32 +19480,73 @@ For more info, visit https://fb.me/react-mock-scheduler`);
         }
       }
     }))), /* @__PURE__ */ import_react.default.createElement("div", {
+      id: "pages"
+    }, /* @__PURE__ */ import_react.default.createElement("div", null, pages.map((p) => /* @__PURE__ */ import_react.default.createElement("span", {
+      style: { color: p === page ? "purple" : "unset" },
+      className: "page-link",
+      onClick: () => {
+        setPage(p);
+        document.querySelector("#app").scroll(0, 0);
+      }
+    }, "[", p, "]"))))), /* @__PURE__ */ import_react.default.createElement("div", {
       id: "garage"
-    }), /* @__PURE__ */ import_react.default.createElement("div", {
+    }), showIntro && /* @__PURE__ */ import_react.default.createElement(Introduction, {
+      visible: showIntro,
+      setVisible: setShowIntro
+    }));
+  }
+  function Introduction({ visible, setVisible }) {
+    const [tab, setTab] = (0, import_react.useState)("intro");
+    if (!visible) {
+      return false;
+    }
+    return /* @__PURE__ */ import_react.default.createElement("div", {
       id: "introduction"
     }, /* @__PURE__ */ import_react.default.createElement("div", {
       style: { "text-align": "center" }
-    }, /* @__PURE__ */ import_react.default.createElement("h1", null, "Introduction ", /* @__PURE__ */ import_react.default.createElement("span", {
+    }, /* @__PURE__ */ import_react.default.createElement("h1", null, /* @__PURE__ */ import_react.default.createElement("span", {
+      onClick: () => setTab("intro")
+    }, "Introduction"), /* @__PURE__ */ import_react.default.createElement("span", {
+      onClick: () => setTab("info"),
       style: { color: "gray" }
-    }, "Information"))), /* @__PURE__ */ import_react.default.createElement("p", null, `"Meat on Chain", Yngve Holen's first NFT project, brings his strong physical work into a new phase within a digital context, challenging my ability to even phrase this boundary neatly. Already an expert in recontextualizing manufactured and processed objects from everything between the car factory to the meat plant blha blhablahb`), /* @__PURE__ */ import_react.default.createElement("p", null, `Looking back on holen's work, I am drawn in by his use of the simple cut. In INTERVIEW, the interviewer writes "Seeing" blah blahbla`)));
+    }, "Information"), /* @__PURE__ */ import_react.default.createElement("span", {
+      onClick: () => setVisible(false)
+    }, "[x]"))), /* @__PURE__ */ import_react.default.createElement("p", {
+      className: tab === "intro" ? "vis" : ""
+    }, `"Meat on Chain", Yngve Holen's first NFT project, brings his strong physical work into a new phase within a digital context, challenging my ability to even phrase this boundary neatly. Already an expert in recontextualizing manufactured and processed objects from everything between the car factory to the meat plant blha blhablahb`), /* @__PURE__ */ import_react.default.createElement("p", {
+      className: tab !== "intro" ? "vis" : ""
+    }, `Looking back on holen's work, I am drawn in by his  asuse of the simple cut. In INTERVIEW, the interviewer writes "Seeing" blah blahblasdf afs sf af ef a`));
   }
   function Post({ post, username, addComment = () => "ok" }) {
     const [txt, setTxt] = (0, import_react.useState)("");
+    const [isBig, setIsBig] = (0, import_react.useState)(false);
     return /* @__PURE__ */ import_react.default.createElement("div", {
       class: "post"
     }, /* @__PURE__ */ import_react.default.createElement("h5", null, /* @__PURE__ */ import_react.default.createElement("span", {
       class: "post-description"
-    }, post.user), /* @__PURE__ */ import_react.default.createElement("span", null, post.date), /* @__PURE__ */ import_react.default.createElement("span", null, post.id)), /* @__PURE__ */ import_react.default.createElement("div", {
-      class: "flex"
+    }, post.user), /* @__PURE__ */ import_react.default.createElement("span", null, post.date), /* @__PURE__ */ import_react.default.createElement("span", null, "#", post.id)), /* @__PURE__ */ import_react.default.createElement("div", {
+      className: `tt ${isBig ? "big" : "small"}`,
+      onClick: () => setIsBig(false)
     }, /* @__PURE__ */ import_react.default.createElement("img", {
-      height: 0,
-      width: 30,
-      src: "unnamed1.png"
-    }), /* @__PURE__ */ import_react.default.createElement("img", {
       height: 200,
       width: 200,
       src: post.image
+    })), /* @__PURE__ */ import_react.default.createElement("div", {
+      class: "flex"
+    }, /* @__PURE__ */ import_react.default.createElement("img", {
+      style: { cursor: "pointer" },
+      height: 30,
+      width: 30,
+      src: "unnamed1.png",
+      onClick: () => setIsBig(true)
     }), /* @__PURE__ */ import_react.default.createElement("div", {
+      id: post.id + "img",
+      className: "bg"
+    }, /* @__PURE__ */ import_react.default.createElement("img", {
+      height: 200,
+      width: 200,
+      src: post.image
+    })), /* @__PURE__ */ import_react.default.createElement("div", {
       class: "comments"
     }, post.comments.map((c) => /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("span", null, c.user, ":"), /* @__PURE__ */ import_react.default.createElement("div", {
       class: "comment flex"

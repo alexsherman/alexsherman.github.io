@@ -4,6 +4,11 @@ body {
   background-size: cover;
   height: 100vh;
   background: linear-gradient(15deg, #c6c6c6 0%, #dbafdd 70%);
+  overflow: hidden;
+}
+#app {
+  height: 100%;
+  overflow-y: scroll;
 }
 header {
   margin: 0 10%;
@@ -29,6 +34,15 @@ header > * {
 .post h5 {
   margin-bottom: 16px;
 }
+#pages {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+#pages span {
+  margin: 8px;
+  cursor: pointer;
+}
 #mint {
   background: linear-gradient(15deg, white 0%, #c6c6c6 30%, #988398 100%);
   box-shadow: 4px 4px 4px 0px #0000002e;
@@ -49,6 +63,35 @@ header > * {
   font-size: 30px;
   font-family: Arial;
   letter-spacing: -1px;
+}
+.tt {
+  transform: scale(0);
+  z-index: 1;
+  transition: 0.3s;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+}
+.tt img {
+  transition: 0.3s;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+}
+.tt.big {
+  transform: scale(1);
+  background: #0000005e;
+  backdrop-filter: blur(2px);
+  left: 0;
+  top: 0;
+}
+.tt.big img {
+  width: 80vh;
+  height: 80vh;
+  left: calc(50vw - 40vh);
+  top: 10vh;
 }
 .flex {
   display: flex;
@@ -119,7 +162,6 @@ header > * {
   transform: rotate(-8deg);
 }
 #introduction {
-  opacity: 0;
   transition: 1s;
   border: 2px solid #63634c;
   max-width: 500px;
@@ -129,6 +171,20 @@ header > * {
   top: 180px;
   right: 20px;
   background: #dbafdd;
+}
+#introduction p {
+  transition: 0.5s;
+  opacity: 0;
+  height: 0;
+  margin: 0;
+}
+#introduction p.vis {
+  opacity: 1;
+  height: unset;
+}
+#introduction span {
+  cursor: pointer;
+  margin-right: 8px;
 }
 #loader {
   margin: 24px auto;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 let dummyposts = [];
@@ -9,7 +9,7 @@ for (let i = 0; i < 20; i++) {
     dummyposts.push({
         user,
         date: '02/02/2022 16:32:48',
-        id: '#' + id,
+        id: 'p' + id,
         image,
         comments: [
             {
@@ -25,6 +25,14 @@ export default function() {
     const [loading, setLoading] = useState(true);
     const [connecting, setConnecting] = useState(true);
     const [posts, setPosts] = useState(dummyposts);
+    const [page, setPage] = useState(1);
+    const [showIntro, setShowIntro] = useState(false)
+    const PAGE_LENGTH = 10;
+
+    let pages = [];
+    for (let i = 0; i < Math.ceil(posts.length / PAGE_LENGTH); i++) {
+        pages.push(i + 1)
+    }
 
     const ethv = async () => {
         const a = localStorage.getItem(k);
@@ -45,13 +53,12 @@ export default function() {
             setUsername(account)
         } catch (e) {
             alert('woops, we no could attach to ur eth account! no chat for u');
-            setUsername('testbob')
         }
 
         setConnecting(false)
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setTimeout(() => {
             document.querySelector("#garage").style.transition = '2s';
             document.querySelector("#garage").style.top = '-100%';
@@ -98,69 +105,111 @@ export default function() {
             <h1>Meat on Chain</h1>
             <p>YNGVE HOLEN</p>
         </div>
-        <div id="description-toggle">
+        <div id="description-toggle" onClick={() => setShowIntro(true)}>
             <img width={100} height={100} src='cartoonmeat.png' />
         </div>
+   
         </header>
-        {
-            loading && 
-             <div id='loader'>
-                <div class='flex-center'>
-                    <div class='loadbox'></div>
-                    <div class='loadbox'></div>
-                    <div class='loadbox'></div>
-                    <div class='loadbox'></div>
-                    <div class='loadbox'></div>
-                </div>
-                <i>loading . . .</i>
+         <div id='loader'>
+            <div class='flex-center'>
+                <div class='loadbox'></div>
+                <div class='loadbox'></div>
+                <div class='loadbox'></div>
+                <div class='loadbox'></div>
+                <div class='loadbox'></div>
             </div>
-        }
+            <i>loading . . .</i>
+        </div>
         {
             !loading && !connecting &&
-            <div id='posts'>
-                { posts.map(p => <Post post={p} username={username} addComment={(comment) => {
-                    let y = posts.find(x => x.id === p.id);
-                    if (y) {
-                        y.comments.push({
-                            user: username,
-                            msg: comment
-                        })
-                        setPosts(JSON.parse(JSON.stringify(posts)))
-                    }
-                }}/>)}
-            </div>
+            <>
+                <div id='posts'>
+                    { posts.slice((page - 1) * PAGE_LENGTH, page * PAGE_LENGTH).map(p => <Post post={p} username={username} addComment={(comment) => {
+                        let y = posts.find(x => x.id === p.id);
+                        if (y) {
+                            y.comments.push({
+                                user: username,
+                                msg: comment
+                            })
+                            setPosts(JSON.parse(JSON.stringify(posts)))
+                        }
+                    }}/>)}
+                </div>
+                <div id="pages">
+                    <div>
+                        { pages.map(p => <span style={{ color: p === page ? 'purple' : 'unset'}} className='page-link' onClick={() => {
+                            setPage(p);
+                            document.querySelector('#app').scroll(0, 0);
+                        }}>[{p}]</span>) }
+                    </div>
+                </div>
+                
+            </>
         }
        
         <div id='garage'>
         </div>
-        <div id='introduction'>
-            <div style={{'text-align': 'center'}}>
-                <h1>Introduction <span style={{color: 'gray'}}>Information</span></h1>
-            </div>
-            <p>
-                "Meat on Chain", Yngve Holen's first NFT project, brings his strong physical work
-                into a new phase within a digital context, challenging my ability to even phrase
-                this boundary neatly. Already an expert in recontextualizing manufactured and processed
-                objects from everything between the car factory to the meat plant blha blhablahb
-            </p>
-            <p>
-                Looking back on holen's work, I am drawn in by his use of the simple cut. In INTERVIEW,
-                the interviewer writes "Seeing" blah blahbla
-            </p>
-        </div>
+        {
+            showIntro &&
+            <Introduction visible={showIntro} setVisible={setShowIntro} />
+            
+        }
+       
     </>
+   
+}
+
+function Introduction({ visible, setVisible }) {
+    const [tab, setTab] = useState('intro');
+
+    if (!visible) {
+        return false;
+    }
+
+   return <div id='introduction'>
+        <div style={{'text-align': 'center'}}>
+            <h1>
+                <span onClick={() => setTab('intro')}>Introduction</span>
+                <span onClick={() => setTab('info')} style={{color: 'gray'}}>Information</span> 
+                <span onClick={() => setVisible(false)}>[x]</span>
+            </h1>
+        </div>
+        <p className={tab === 'intro' ? 'vis' : ''}>
+            "Meat on Chain", Yngve Holen's first NFT project, brings his strong physical work
+            into a new phase within a digital context, challenging my ability to even phrase
+            this boundary neatly. Already an expert in recontextualizing manufactured and processed
+            objects from everything between the car factory to the meat plant blha blhablahb
+        </p>
+        <p className={tab !== 'intro' ? 'vis' : ''}>
+            Looking back on holen's work, I am drawn in by his  asuse of the simple cut. In INTERVIEW,
+            the interviewer writes "Seeing" blah blahblasdf afs sf af ef a 
+        </p>
+    </div>
 }
 
 function Post({ post, username, addComment = () => 'ok' }) {
     const [txt, setTxt] = useState('');
+    const [isBig, setIsBig] = useState(false);
 
     return <div class='post'>
-        <h5><span class='post-description'>{post.user}</span>
-        <span>{post.date}</span>
-        <span>{post.id}</span></h5>
-        <div class='flex'>
-            <img height={0} width={30} src='unnamed1.png' />
+        <h5>
+            <span class='post-description'>{post.user}</span>
+            <span>{post.date}</span>
+            <span>#{post.id}</span>
+        </h5>
+        <div className={`tt ${isBig ? 'big' : 'small'}`} onClick={
+            () => setIsBig(false)
+        }>
             <img height={200} width={200} src={post.image} />
+        </div>
+        <div class='flex'>
+            <img style={{cursor: 'pointer'}} height={30} width={30} src='unnamed1.png'  onClick={
+               () => setIsBig(true)
+            }/>
+            <div id={post.id + 'img'} className='bg'>
+                <img height={200} width={200} src={post.image} />
+
+            </div>
             
             <div class='comments'>
                 { post.comments.map(c => <div>
